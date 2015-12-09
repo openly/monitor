@@ -22,7 +22,7 @@ class Job
       e = new Error ("Slack api url is not set yet.")
       return cb.apply @, [e]
     #every 15 min once
-    interval = '* * * * *'
+    interval = '*/15 * * * *'
     j = schedule.scheduleJob(interval, @monitorSites.bind(@))
     return cb.apply @, [null]
 
