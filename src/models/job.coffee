@@ -31,6 +31,7 @@ class Job
     
     monitorEachSite = (site, asyncCb)=>
       request site.url, (err, resp, body)=>
+        Log.info "#{site.name} is UP" if resp?.statusCode is 200
         if resp?.statusCode isnt 200 or err?.code is 'ECONNREFUSED'
           @sendMessageToSlack(site)
         
