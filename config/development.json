@@ -1,0 +1,43 @@
+{
+  "port": {
+    "monitor_app": 4011
+  },
+  "sites":[
+    {
+      "name":"Synops service app",
+      "url":"http://127.0.0.1:4029/version",
+      "slack":{
+        "channel":"#synops-test-channel",
+        "as_user":false,
+        "token":"xoxp-3771424663-3833584321-16251511508-7e4c2c5813",
+        "text" :"Looks like Synops service app is down.Maintainence mode ON",
+        "username":"MONITOR",
+        "icon_emoji":":exclamation:"
+      }
+    },
+    {
+      "name":"Synops web app",
+      "url":"http://127.0.0.1:4030/login",
+      "slack":{
+        "channel":"#synops-test-channel",
+        "as_user":false,
+        "token":"xoxp-3771424663-3833584321-16251511508-7e4c2c5813",
+        "text" :"Looks like Synops web app is down.Maintainence mode ON",
+        "username":"MONITOR",
+        "icon_emoji":":exclamation:"
+      }
+    },
+    {
+      "name":"Synops admin app",
+      "url":"http://127.0.0.1:3011/login",
+      "slack":{
+        "channel":"#synops-test-channel",
+        "as_user":false,
+        "token":"xoxp-3771424663-3833584321-16251511508-7e4c2c5813",
+        "text" :"Looks like Synops admin app is down.Maintainence mode ON",
+        "username":"MONITOR",
+        "icon_emoji":":exclamation:"
+      }
+    }
+  ]
+}

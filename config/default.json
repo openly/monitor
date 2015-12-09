@@ -1,0 +1,7 @@
+{
+  "api":{
+    "name":"Monitor API",
+    "version": "0.0.1"
+  },
+  "slack_api_url":"https://slack.com/api/chat.postMessage"
+}
