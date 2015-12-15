@@ -2,6 +2,7 @@ schedule = require 'node-schedule'
 async = require 'async'
 moment = require 'moment'
 request = require 'request'
+statusModel = require './status'
 
 class Job
   
@@ -22,7 +23,7 @@ class Job
       e = new Error ("Slack api url is not set yet.")
       return cb.apply @, [e]
     #every 15 min once
-    interval = '*/15 * * * *'
+    interval = '* * * * *'
     j = schedule.scheduleJob(interval, @monitorSites.bind(@))
     return cb.apply @, [null]
 
@@ -31,12 +32,17 @@ class Job
     
     monitorEachSite = (site, asyncCb)=>
       request site.url, (err, resp, body)=>
-        Log.info "#{site.name} is UP" if resp?.statusCode is 200
-        if resp?.statusCode isnt 200 or err?.code is 'ECONNREFUSED'
-          @sendMessageToSlack(site)
-        
-        return asyncCb(null)
-
+        Log.info "#{site.name} is Up" if resp?.statusCode is 200
+        Log.info "#{site.name} is Down" if resp?.statusCode isnt 200
+        isStatusChanged = statusModel.isStatusChanged(site.name, resp?.statusCode)
+        if isStatusChanged
+          statusModel.setStatus(site.name, resp?.statusCode)
+          @sendMessageToSlack site, resp?.statusCode, (e)->
+            Log.error e
+            return asyncCb(null)
+        else
+          return asyncCb(null)
+    
     async.eachSeries sites, monitorEachSite, (err)=>
       if err?
         Log.error err.message
@@ -46,13 +52,22 @@ class Job
       return cb.apply @, [err] if cb?
 
 
-  sendMessageToSlack: (details)->
+  sendMessageToSlack: (details, statusCode, cb)->
+    username = if details.slack.username? then details.slack.username else "MONITOR"
+    up_icon_emoji = ":green_heart:"
+    down_icon_emoji = ":broken_heart:"
+    icon_emoji = if details.slack.icon_emoji? then details.slack.icon_emoji else ":beginner:"
+    downMessage = down_icon_emoji + " Looks like #{details.name} is down."+  details.url
+    upMessage = up_icon_emoji + " Yay!! #{details.name} is up and running now "+ details.url
+    message = if statusCode isnt 200 then downMessage else upMessage
+    text = if details.slack.text? then details.slack.text else message
+    
     qsData = {
       token:details.slack.token,
       channel:details.slack.channel,
-      username:details.slack.username,
-      icon_emoji:details.slack.icon_emoji,
-      text:details.slack.text
+      username:username,
+      icon_emoji:icon_emoji,
+      text:text
     }
     data = {
       url: config.get('slack_api_url'),
@@ -60,9 +75,8 @@ class Job
       method: 'POST'
     }
     request data, (err, resp, body)->
-      Log.error err.message if err?
       Log.info "Message sent to #{details.slack.channel} - #{details.name}"
-    return
+      return cb(err)
 
 
 job = new Job
