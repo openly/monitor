@@ -57,7 +57,7 @@ class Job
 
 
   sendMessageToSlack: (details, statusCode, cb)->
-    username = if details.slack.username? then details.slack.username else "MONITOR"
+    username = if details.slack.username? then details.slack.username else "Monitor"
     icon_emoji = if details.slack.icon_emoji? then details.slack.icon_emoji else ":monitor:"
     downMessage = "Looks like #{details.name} is down"
     upMessage = "#{details.name} is up and running"
