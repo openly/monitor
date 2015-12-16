@@ -58,7 +58,7 @@ class Job
     down_icon_emoji = ":broken_heart:"
     icon_emoji = if details.slack.icon_emoji? then details.slack.icon_emoji else ":beginner:"
     downMessage = down_icon_emoji + " Looks like #{details.name} is down."+  details.url
-    upMessage = up_icon_emoji + " Yay!! #{details.name} is up and running now "+ details.url
+    upMessage = up_icon_emoji + " Yay!! #{details.name} is up and running "+ details.url
     message = if statusCode isnt 200 then downMessage else upMessage
     text = if details.slack.text? then details.slack.text else message
     
