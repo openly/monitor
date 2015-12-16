@@ -22,8 +22,12 @@ class Job
     unless config.get('slack_api_url')?
       e = new Error ("Slack api url is not set yet.")
       return cb.apply @, [e]
+
+    unless config.get('interval')?
+      e = new Error ("Cron job interval is not set yet.")
+      return cb.apply @, [e]
     #every 15 min once
-    interval = '*/15 * * * *'
+    interval = if config.get('interval')? then config.get('interval') else "*/15 * * * *"
     j = schedule.scheduleJob(interval, @monitorSites.bind(@))
     return cb.apply @, [null]
 
@@ -54,21 +58,30 @@ class Job
 
   sendMessageToSlack: (details, statusCode, cb)->
     username = if details.slack.username? then details.slack.username else "MONITOR"
-    up_icon_emoji = ":green_heart:"
-    down_icon_emoji = ":broken_heart:"
-    icon_emoji = if details.slack.icon_emoji? then details.slack.icon_emoji else ":beginner:"
-    downMessage = down_icon_emoji + " Looks like #{details.name} is down."+  details.url
-    upMessage = up_icon_emoji + " Yay!! #{details.name} is up and running "+ details.url
+    icon_emoji = if details.slack.icon_emoji? then details.slack.icon_emoji else ":monitor:"
+    downMessage = "Looks like #{details.name} is down"
+    upMessage = "#{details.name} is up and running"
     message = if statusCode isnt 200 then downMessage else upMessage
     text = if details.slack.text? then details.slack.text else message
+    barColor = if statusCode isnt 200 then "#FF0033" else "#36a64f"
     
+    attachment = []
+    attachment. push {
+      fallback: "Monitoring sites",
+      author_name :"#{message}",
+      title :"Click here to Navigate",
+      title_link:details.url,
+      color:barColor
+    }
+
     qsData = {
       token:details.slack.token,
       channel:details.slack.channel,
       username:username,
       icon_emoji:icon_emoji,
-      text:text
+      attachments: JSON.stringify(attachment)
     }
+
     data = {
       url: config.get('slack_api_url'),
       qs: qsData,

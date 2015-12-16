@@ -3,6 +3,7 @@
     "name":"Monitor API",
     "version": "0.0.1"
   },
+  "interval":"*/15 * * * *",
   "slack_api_url":"https://slack.com/api/chat.postMessage",
   "port": {
     "monitor_app": 4011
