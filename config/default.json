@@ -9,8 +9,8 @@
   },
   "sites":[
   {
-      "name":"Synops Test:service app",
-      "url":"http://api-test.synops.openly.co/version",
+      "name":"Synops Stage:service app",
+      "url":"http://api-stage.synops.openly.co/version",
       "slack":{
         "channel":"#synops",
         "as_user":false,
@@ -18,8 +18,8 @@
       }
     },
     {
-      "name":"Synops Test:web app",
-      "url":"http://synopstest:Iom5m5@app-test.synops.openly.co",
+      "name":"Synops Stage:web app",
+      "url":"http://app-stage.synops.openly.co",
       "slack":{
         "channel":"#synops",
         "as_user":false,
@@ -27,35 +27,8 @@
       }
     },
     {
-      "name":"Synops Test:admin app",
-      "url":"http://synopstest:Iom5m5@admin-test.synops.openly.co",
-      "slack":{
-        "channel":"#synops",
-        "as_user":false,
-        "token":"xoxp-3771424663-3833584321-16251511508-7e4c2c5813"
-      }
-    },
-    {
-      "name":"Synops Sanbox:service app",
-      "url":"http://api-sandbox.synops.openly.co/version",
-      "slack":{
-        "channel":"#synops",
-        "as_user":false,
-        "token":"xoxp-3771424663-3833584321-16251511508-7e4c2c5813"
-      }
-    },
-    {
-      "name":"Synops Sandbox:web app",
-      "url":"http://app-sandbox.synops.openly.co/login",
-      "slack":{
-        "channel":"#synops",
-        "as_user":false,
-        "token":"xoxp-3771424663-3833584321-16251511508-7e4c2c5813"
-      }
-    },
-    {
-      "name":"Synops Sandbox:admin app",
-      "url":"http://synopstest:Iom5m5@admin-test.synops.openly.co",
+      "name":"Synops Stage:admin app",
+      "url":"http://admin-stage.synops.openly.co",
       "slack":{
         "channel":"#synops",
         "as_user":false,
